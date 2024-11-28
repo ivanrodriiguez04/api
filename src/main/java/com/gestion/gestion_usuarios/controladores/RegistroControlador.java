@@ -22,12 +22,22 @@ public class RegistroControlador {
 	private ClubServicio clubServicio;
 
 	@PostMapping("/usuario")
-	public ResponseEntity<String> registerClub(@RequestBody RegistroUsuarioDto usuarioDto) {
-		if (usuarioServicio.emailExistsUsuario(usuarioDto.getEmailUsuario())) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email ya registrado");
-		}
-		usuarioServicio.registroUsuario(usuarioDto);
-		return ResponseEntity.ok("success");
+	public ResponseEntity<String> registroUsuario(@RequestBody RegistroUsuarioDto usuarioDto) {
+	    try {
+	        if (usuarioDto.getEmailUsuario() == null || usuarioDto.getEmailUsuario().isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El email es obligatorio.");
+	        }
+
+	        if (usuarioServicio.emailExistsUsuario(usuarioDto.getEmailUsuario())) {
+	            return ResponseEntity.status(HttpStatus.CONFLICT).body("El email ya está registrado.");
+	        }
+
+	        usuarioServicio.registroUsuario(usuarioDto);
+	        return ResponseEntity.status(HttpStatus.CREATED).body("Usuario registrado exitosamente.");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor.");
+	    }
 	}
 
 	@PostMapping("/club")

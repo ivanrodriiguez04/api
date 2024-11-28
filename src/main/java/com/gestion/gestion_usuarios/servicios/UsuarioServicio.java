@@ -51,17 +51,20 @@ public class UsuarioServicio {
 
 	// Método para registrar un nuevo club
 	public void registroUsuario(RegistroUsuarioDto usuarioDto) {
-		UsuarioDao usuario = new UsuarioDao();
-		usuario.setNicknameUsuario(usuarioDto.getNicknameUsuario());
-		usuario.setNombreUsuario(usuarioDto.getNombreUsuario());
-		usuario.setDniUsuario(usuarioDto.getDniUsuario());
-		usuario.setTelefonoUsuario(usuarioDto.getTelefonoUsuario());
-		usuario.setEmailUsuario(usuarioDto.getEmailUsuario());
-		usuario.setPasswordUsuario(usuarioDto.getPasswordUsuario()); // Asegúrate de encriptar la contraseña antes de
-																		// guardarla
-		usuario.setRol("usuario");
+	    if (usuarioDto.getEmailUsuario() == null || usuarioDto.getEmailUsuario().isEmpty()) {
+	        throw new IllegalArgumentException("El email es obligatorio.");
+	    }
 
-		usuarioRepository.save(usuario); // Guardar el nuevo club en la base de datos
+	    UsuarioDao usuario = new UsuarioDao();
+	    usuario.setNicknameUsuario(usuarioDto.getNicknameUsuario());
+	    usuario.setNombreUsuario(usuarioDto.getNombreUsuario());
+	    usuario.setDniUsuario(usuarioDto.getDniUsuario());
+	    usuario.setTelefonoUsuario(usuarioDto.getTelefonoUsuario());
+	    usuario.setEmailUsuario(usuarioDto.getEmailUsuario());
+	    usuario.setPasswordUsuario(usuarioDto.getPasswordUsuario()); // Asegúrate de encriptar la contraseña
+	    usuario.setRol("usuario");
+
+	    usuarioRepository.save(usuario);
 	}
 
 	/**

@@ -1,8 +1,11 @@
 package com.gestion.gestion_usuarios.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class RegistroUsuarioDto {
 
 	private long idUsuario;
+	@JsonProperty("nicknameUsuario")
 	private String nicknameUsuario;
 	private String nombreUsuario;
 	private String dniUsuario;
