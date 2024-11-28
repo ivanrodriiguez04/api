@@ -51,7 +51,7 @@ public class RegistroControlador {
 	            return ResponseEntity.status(HttpStatus.CONFLICT).body("El email ya está registrado.");
 	        }
 
-	        clubServicio.registrarClub(clubDto);
+	        clubServicio.registroClub(clubDto);
 	        return ResponseEntity.status(HttpStatus.CREATED).body("Club registrado exitosamente.");
 	    } catch (Exception e) {
 	        e.printStackTrace();

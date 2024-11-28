@@ -2,9 +2,8 @@ package com.gestion.gestion_usuarios.servicios;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.gestion.gestion_usuarios.daos.ClubDao;
 import com.gestion.gestion_usuarios.dtos.RegistroClubDto;
@@ -12,50 +11,44 @@ import com.gestion.gestion_usuarios.repositorios.ClubRepository;
 
 @Service
 public class ClubServicio {
-    @Autowired
-    private ClubRepository clubRepository;
 
-  //Metodo que  valida las credenciales del club
-  	 public ResponseEntity<String> validarCredenciales(String emailClub, String passwordClub) {
-  		    // Intentamos recuperar al club por su email
-  		    ClubDao club = clubRepository.findByEmailClub(emailClub);
+	@Autowired
+	private ClubRepository clubRepository; // Inyectamos el repositorio
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
-  		    if (club == null) {
-  		        System.out.println("Usuario no encontrado para el email: " + emailClub);
-  		        return ResponseEntity.status(401).body("Credenciales incorrectas");
-  		    }
+	// Metodo que valida las credenciales del club
+	public ResponseEntity<String> validarCredenciales(String emailClub, String passwordClub) {
+		ClubDao club = clubRepository.findByEmailClub(emailClub);
 
-  		    System.out.println("Usuario encontrado: " + club.getEmailClub());
-  		    System.out.println("Contraseña almacenada: " + club.getPasswordClub());
-  		    System.out.println("Contraseña recibida: " + passwordClub);
+		if (club == null) {
+			System.out.println("Club no encontrado para el email: " + emailClub);
+			return ResponseEntity.status(401).body("Credenciales incorrectas");
+		}
 
-  		    // Comparación directa de la contraseña
-  		    if (!passwordClub.equals(club.getPasswordClub())) {
-  		        System.out.println("Contraseña incorrecta");
-  		        return ResponseEntity.status(401).body("Credenciales incorrectas");
-  		    }
-
-  		    // Si las credenciales son correctas, devolvemos un mensaje genérico de éxito
-  		    System.out.println("Credenciales correctas");
-  		    return ResponseEntity.status(200).body("club");
-  		}
-    @Transactional
-    public boolean registrarClub(RegistroClubDto clubDto) {
-        if (clubDto.getEmailClub() == null || clubDto.getEmailClub().isEmpty()) {
-            throw new IllegalArgumentException("El email es obligatorio.");
-        }
-        
-        if (clubRepository.existsByEmailClub(clubDto.getEmailClub())) {
-            return false; // El correo ya está registrado
+		// Comparar la contraseña ingresada (texto plano) con la almacenada (encriptada)
+        if (!passwordEncoder.matches(passwordClub, club.getPasswordClub())) {
+            System.out.println("Contraseña incorrecta");
+            return ResponseEntity.status(401).body("Credenciales incorrectas");
         }
 
-        ClubDao club = new ClubDao();
-        club.setNombreClub(clubDto.getNombreClub());
-        club.setSedeClub(clubDto.getSedeClub());
-        club.setEmailClub(clubDto.getEmailClub());
-        club.setPasswordClub(clubDto.getPasswordClub()); // Encriptación de la contraseña
+		return ResponseEntity.ok("club");
+	}
 
-        clubRepository.save(club);
-        return true;
-    }
+	// Metodo que se asegura si el correo ya se encuentra registrado
+	public boolean emailExistsClub(String emailCLub) {
+		return clubRepository.existsByEmailClub(emailCLub);
+	}
+
+	// Método para registrar un nuevo club
+	public void registroClub(RegistroClubDto clubDto) {
+		ClubDao club = new ClubDao();
+		club.setNombreClub(clubDto.getNombreClub());
+		club.setEmailClub(clubDto.getEmailClub());
+		club.setSedeClub(clubDto.getSedeClub());
+		club.setPasswordClub(passwordEncoder.encode(clubDto.getPasswordClub()));// Encripta la contraseña antes de
+																				// guardarla
+
+		clubRepository.save(club); // Guardar el nuevo club en la base de datos
+	}
 }
