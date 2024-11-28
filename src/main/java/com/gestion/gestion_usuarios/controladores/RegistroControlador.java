@@ -41,11 +41,21 @@ public class RegistroControlador {
 	}
 
 	@PostMapping("/club")
-	public ResponseEntity<String> registerClub(@RequestBody RegistroClubDto clubDto) {
-		if (clubServicio.emailExistsClub(clubDto.getEmailClub())) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email ya registrado");
-		}
-		clubServicio.registroClub(clubDto);
-		return ResponseEntity.ok("success");
+	public ResponseEntity<String> registroClub(@RequestBody RegistroClubDto clubDto) {
+		try {
+	        if (clubDto.getEmailClub() == null || clubDto.getEmailClub().isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El email es obligatorio.");
+	        }
+
+	        if (usuarioServicio.emailExistsUsuario(clubDto.getEmailClub())) {
+	            return ResponseEntity.status(HttpStatus.CONFLICT).body("El email ya está registrado.");
+	        }
+
+	        clubServicio.registrarClub(clubDto);
+	        return ResponseEntity.status(HttpStatus.CREATED).body("Club registrado exitosamente.");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor.");
+	    }
 	}
 }
