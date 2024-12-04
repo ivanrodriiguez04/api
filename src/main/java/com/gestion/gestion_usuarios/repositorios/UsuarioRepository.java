@@ -2,20 +2,18 @@ package com.gestion.gestion_usuarios.repositorios;
   // Asegúrate de que sea la entidad
 import com.gestion.gestion_usuarios.daos.UsuarioDao;
 
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioDao, Long> {
-	
-    UsuarioDao findByEmailUsuario(String emailUsuario);  // Buscar usuario por email
 
-	boolean existsByEmailUsuario(String emailUsuario); //Metodo para revisar si el email ya se encuentra registrado
+    // Método para encontrar usuarios cuyo nombre contiene una subcadena (insensible a mayúsculas/minúsculas)
+    List<UsuarioDao> findByNombreUsuarioContainingIgnoreCase(String nombreUsuario);
 
-	
-	void deleteByEmailUsuario(String emailUsuario);//borrar por nickname
-	
+    UsuarioDao findByEmailUsuario(String emailUsuario);
 
-    
+    boolean existsByEmailUsuario(String emailUsuario); // Método para revisar si el email ya está registrado
 }

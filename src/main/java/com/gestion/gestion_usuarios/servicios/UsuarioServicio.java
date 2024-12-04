@@ -1,13 +1,11 @@
 package com.gestion.gestion_usuarios.servicios;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.gestion.gestion_usuarios.daos.UsuarioDao;
 import com.gestion.gestion_usuarios.dtos.RegistroUsuarioDto;
@@ -85,4 +83,8 @@ public class UsuarioServicio {
 	    usuario.setRol("usuario");
 	    usuarioRepository.save(usuario);
 	}
+	
+	public List<UsuarioDao> findUsersByName(String nombreUsuario) {
+        return usuarioRepository.findByNombreUsuarioContainingIgnoreCase(nombreUsuario);
+    }
 }

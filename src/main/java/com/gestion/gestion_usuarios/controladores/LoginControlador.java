@@ -46,14 +46,14 @@ public class LoginControlador {
         return ResponseEntity.status(401).body("Rol desconocido.");
     }
     
- // Endpoint para autenticar usuario
+ // Endpoint para autenticar club
     @PostMapping("/validarClub")
     public ResponseEntity<String> autenticarClub(@RequestBody LoginClubDto club) {
-        System.out.println("Email recibido: " + club.getEmail());
-        System.out.println("Contraseña recibida: " + club.getPassword());
+        System.out.println("Email recibido: " + club.getEmailClub());
+        System.out.println("Contraseña recibida: " + club.getPasswordClub());
 
         // Llamamos al servicio para validar las credenciales
-        ResponseEntity<String> resultado = clubServicio.validarCredenciales(club.getEmail(), club.getPassword());
+        ResponseEntity<String> resultado = clubServicio.validarCredenciales(club.getEmailClub(), club.getPasswordClub());
 
         // Verificamos si las credenciales son correctas
         if (resultado.getStatusCodeValue() == 401) {

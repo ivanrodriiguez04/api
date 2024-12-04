@@ -1,9 +1,7 @@
 package com.gestion.gestion_usuarios.daos;
 
-import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,36 +11,33 @@ import jakarta.persistence.Table;
 @Table(name = "usuario", schema = "gestion")  // Especifica el esquema "gestion"
 public class UsuarioDao {
 
-	/** Identificador único del usuario, generado automáticamente. */
-    @Id // Marca este campo como la clave primaria
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Genera el ID automáticamente
-    @Column(name = "id_usuario", updatable = false) // Configuración de la columna en la base de datos
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario", updatable = false)
     private long idUsuario;
 
-    @Column(name = "nickname_usuario", unique = true, length = 50) // Campo único y requerido
+    @Column(name = "nickname_usuario", unique = true, length = 50)
     private String nicknameUsuario;
 
-    @Column(name = "nombre_usuario",  length = 100) // Campo requerido
+    @Column(name = "nombre_usuario", length = 100) // Esta es la propiedad que se debe usar en el repositorio
     private String nombreUsuario;
 
-    @Column(name = "dni_usuario", unique = true, length = 20) // Campo único y requerido
+    @Column(name = "dni_usuario", unique = true, length = 20)
     private String dniUsuario;
 
-    @Column(name = "telefono_usuario", length = 15) // Campo opcional
+    @Column(name = "telefono_usuario", length = 15)
     private String telefonoUsuario;
 
-    @Column(name = "foto_usuario", columnDefinition = "bytea") // Personaliza el tipo de columna
-    @Basic(fetch = FetchType.LAZY) // Indica carga diferida para este campo
+    @Column(name = "foto_usuario", columnDefinition = "bytea")
     private byte[] fotoUsuario;
 
-    @Column(name = "email_usuario", unique = true, length = 150) // Campo único y requerido
+    @Column(name = "email_usuario", unique = true, length = 150)
     private String emailUsuario;
 
-    @Column(name = "passwd_usuario", length = 255) // Campo requerido
+    @Column(name = "passwd_usuario", length = 255)
     private String passwordUsuario;
 
-    /** Rol asignado al usuario, define los permisos de acceso (ADMIN, USER, etc.). */
-    @Column(name = "rol_usuario", length = 50) // Campo requerido con longitud máxima
+    @Column(name = "rol_usuario", length = 50)
     private String rol;
 
     // ============================
