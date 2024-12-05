@@ -13,23 +13,7 @@ public interface ClubRepository extends JpaRepository<ClubDao, Long>{
 
 	boolean existsByEmailClub(String emailClub); //Metodo para 
 	
-	
-	
-	
-	
-	
-	
-	/**
-	 * Elimina un club por su nombre.
-	 *
-	 * @param nombreClub El nombre del club a eliminar.
-	 */
-	void deleteByNombreClub(String nombreClub);
+	Optional<ClubDao> findById(Long idClub); // Método para encontrar por ID
 
-
-	Optional<ClubDao> findByIdClub(Long idClub); // Encuentra un club por su ID
-	// Método para encontrar un club por su email
-
-	ClubDao save(ClubDao club);
 
 }

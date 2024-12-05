@@ -95,7 +95,7 @@ public class UsuarioServicio {
      * @return true si la modificación fue exitosa; de lo contrario, false
      */
 	@Transactional
-	public boolean modificarUsuario(long idUsuario, String nuevoNombre, String nuevoTelefono, byte[] nuevaFoto) {
+	public boolean modificarUsuario(long idUsuario, String nuevoNombre, String nuevoDni, String nuevoTelefono, String nuevoRol,byte[] nuevaFoto) {
 	    Optional<UsuarioDao> usuarioOpt = usuarioRepository.findById(idUsuario);
 
 	    if (usuarioOpt.isPresent()) {
@@ -108,9 +108,17 @@ public class UsuarioServicio {
 	            usuario.setNombreUsuario(nuevoNombre);
 	            System.out.println("Actualizando nombre: " + nuevoNombre);
 	        }
+	        if (nuevoDni != null && !nuevoDni.isEmpty()) {
+	            usuario.setDniUsuario(nuevoDni);
+	            System.out.println("Actualizando dni: " + nuevoDni);
+	        }
 	        if (nuevoTelefono != null && !nuevoTelefono.isEmpty()) {
 	            usuario.setTelefonoUsuario(nuevoTelefono);
 	            System.out.println("Actualizando teléfono: " + nuevoTelefono);
+	        }
+	        if (nuevoRol != null && !nuevoRol.isEmpty()) {
+	            usuario.setRol(nuevoRol);
+	            System.out.println("Actualizando rol: " + nuevoRol);
 	        }
 	        if (nuevaFoto != null && nuevaFoto.length > 0) {
 	            usuario.setFotoUsuario(nuevaFoto);

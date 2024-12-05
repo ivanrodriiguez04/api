@@ -1,11 +1,15 @@
 package com.gestion.gestion_usuarios.servicios;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gestion.gestion_usuarios.daos.ClubDao;
+import com.gestion.gestion_usuarios.daos.UsuarioDao;
 import com.gestion.gestion_usuarios.dtos.RegistroClubDto;
 import com.gestion.gestion_usuarios.repositorios.ClubRepository;
 
@@ -50,5 +54,52 @@ public class ClubServicio {
 																				// guardarla
 
 		clubRepository.save(club); // Guardar el nuevo club en la base de datos
+	}
+	
+	/**
+     * Modifica los campos nombre, teléfono e imagen de un usuario existente en la base de datos.
+     *
+     * @param idUsuario identificador del usuario a modificar
+     * @param nuevoNombre nuevo nombre del usuario (opcional)
+     * @param nuevoTelefono nuevo teléfono del usuario (opcional)
+     * @param nuevaFoto nueva foto del usuario (opcional)
+     * @return true si la modificación fue exitosa; de lo contrario, false
+     */
+	@Transactional
+	public boolean modificarClub(long idClub, String nuevoNombre, String nuevaSede, byte[] nuevaFoto) {
+	    Optional<ClubDao> clubOpt = clubRepository.findById(idClub);
+
+	    if (clubOpt.isPresent()) {
+	        ClubDao club = clubOpt.get();
+
+	        System.out.println("Club encontrado: " + club);
+
+	        // Modificar los campos si se proporcionan valores no nulos
+	        if (nuevoNombre != null && !nuevoNombre.isEmpty()) {
+	        	club.setNombreClub(nuevoNombre);
+	            System.out.println("Actualizando nombre: " + nuevoNombre);
+	        }
+	        if (nuevaSede != null && !nuevaSede.isEmpty()) {
+	        	club.setSedeClub(nuevaSede);
+	            System.out.println("Actualizando sede: " + nuevaSede);
+	        }
+	        if (nuevaFoto != null && nuevaFoto.length > 0) {
+	        	club.setImagenClub(nuevaFoto);
+	        	System.out.println("Actualizando foto de tamaño: " + nuevaFoto.length);
+	        }
+
+	        // Guardar los cambios
+	        clubRepository.save(club);
+	        System.out.println("Club modificado y guardado en la base de datos.");
+	        return true;
+	    }
+
+	    System.out.println("Club con id " + idClub + " no encontrado.");
+	    return false;
+	}
+	
+	public ClubDao obtenerClubPorId(long idClub) {
+	    return clubRepository.findById(idClub).orElse(null);
+	    // Asegúrate de que `usuarioRepository` esté configurado correctamente
 	}
 }
