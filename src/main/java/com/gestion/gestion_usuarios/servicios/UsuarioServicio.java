@@ -1,11 +1,12 @@
 package com.gestion.gestion_usuarios.servicios;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gestion.gestion_usuarios.daos.UsuarioDao;
 import com.gestion.gestion_usuarios.dtos.RegistroUsuarioDto;
@@ -84,7 +85,51 @@ public class UsuarioServicio {
 	    usuarioRepository.save(usuario);
 	}
 	
-	public List<UsuarioDao> findUsersByName(String nombreUsuario) {
-        return usuarioRepository.findByNombreUsuarioContainingIgnoreCase(nombreUsuario);
-    }
+	/**
+     * Modifica los campos nombre, teléfono e imagen de un usuario existente en la base de datos.
+     *
+     * @param idUsuario identificador del usuario a modificar
+     * @param nuevoNombre nuevo nombre del usuario (opcional)
+     * @param nuevoTelefono nuevo teléfono del usuario (opcional)
+     * @param nuevaFoto nueva foto del usuario (opcional)
+     * @return true si la modificación fue exitosa; de lo contrario, false
+     */
+	@Transactional
+	public boolean modificarUsuario(long idUsuario, String nuevoNombre, String nuevoTelefono, byte[] nuevaFoto) {
+	    Optional<UsuarioDao> usuarioOpt = usuarioRepository.findById(idUsuario);
+
+	    if (usuarioOpt.isPresent()) {
+	        UsuarioDao usuario = usuarioOpt.get();
+
+	        System.out.println("Usuario encontrado: " + usuario);
+
+	        // Modificar los campos si se proporcionan valores no nulos
+	        if (nuevoNombre != null && !nuevoNombre.isEmpty()) {
+	            usuario.setNombreUsuario(nuevoNombre);
+	            System.out.println("Actualizando nombre: " + nuevoNombre);
+	        }
+	        if (nuevoTelefono != null && !nuevoTelefono.isEmpty()) {
+	            usuario.setTelefonoUsuario(nuevoTelefono);
+	            System.out.println("Actualizando teléfono: " + nuevoTelefono);
+	        }
+	        if (nuevaFoto != null && nuevaFoto.length > 0) {
+	            usuario.setFotoUsuario(nuevaFoto);
+	            System.out.println("Actualizando foto de tamaño: " + nuevaFoto.length);
+	        }
+
+	        // Guardar los cambios
+	        usuarioRepository.save(usuario);
+	        System.out.println("Usuario modificado y guardado en la base de datos.");
+	        return true;
+	    }
+
+	    System.out.println("Usuario con id " + idUsuario + " no encontrado.");
+	    return false;
+	}
+	
+	public UsuarioDao obtenerUsuarioPorId(long idUsuario) {
+	    return usuarioRepository.findById(idUsuario).orElse(null);
+	    // Asegúrate de que `usuarioRepository` esté configurado correctamente
+	}
+
 }
