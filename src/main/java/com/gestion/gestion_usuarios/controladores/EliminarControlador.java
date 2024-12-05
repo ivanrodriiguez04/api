@@ -11,15 +11,31 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gestion.gestion_usuarios.servicios.ClubServicio;
 import com.gestion.gestion_usuarios.servicios.UsuarioServicio;
 
+/**
+ * Controlador encargado de manejar las operaciones de eliminación de usuarios y clubes.
+ * Proporciona endpoints para eliminar usuarios y clubes del sistema.
+ */
 @RestController
 @RequestMapping("/api/eliminar")
 public class EliminarControlador {
-	@Autowired
+
+    @Autowired
     private UsuarioServicio usuarioServicio;
+
     @Autowired
     private ClubServicio clubServicio;
-    
- // Eliminar Usuario
+
+    /**
+     * Endpoint para eliminar un usuario por su ID.
+     *
+     * @param idUsuario El ID del usuario a eliminar.
+     * @return Una respuesta HTTP con el resultado de la eliminación:
+     *         <ul>
+     *         <li>204 (NO CONTENT): Usuario eliminado exitosamente.</li>
+     *         <li>404 (NOT FOUND): Usuario no encontrado.</li>
+     *         <li>500 (INTERNAL SERVER ERROR): Error al eliminar el usuario.</li>
+     *         </ul>
+     */
     @DeleteMapping("/usuario/{id}")
     public ResponseEntity<String> borrarUsuario(@PathVariable("id") Long idUsuario) {
         try {
@@ -34,7 +50,17 @@ public class EliminarControlador {
         }
     }
 
-    // Eliminar Club
+    /**
+     * Endpoint para eliminar un club por su ID.
+     *
+     * @param idClub El ID del club a eliminar.
+     * @return Una respuesta HTTP con el resultado de la eliminación:
+     *         <ul>
+     *         <li>204 (NO CONTENT): Club eliminado exitosamente.</li>
+     *         <li>404 (NOT FOUND): Club no encontrado.</li>
+     *         <li>500 (INTERNAL SERVER ERROR): Error al eliminar el club.</li>
+     *         </ul>
+     */
     @DeleteMapping("/club/{id}")
     public ResponseEntity<String> borrarClub(@PathVariable("id") Long idClub) {
         try {

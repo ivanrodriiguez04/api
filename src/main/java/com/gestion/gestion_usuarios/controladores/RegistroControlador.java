@@ -13,49 +13,79 @@ import com.gestion.gestion_usuarios.dtos.RegistroUsuarioDto;
 import com.gestion.gestion_usuarios.servicios.ClubServicio;
 import com.gestion.gestion_usuarios.servicios.UsuarioServicio;
 
+/**
+ * Controlador que maneja el registro de usuarios y clubes.
+ * Proporciona endpoints para registrar nuevos usuarios y clubes en el sistema.
+ */
 @RestController
 @RequestMapping("/api/registro")
 public class RegistroControlador {
-	@Autowired
-	private UsuarioServicio usuarioServicio;
-	@Autowired
-	private ClubServicio clubServicio;
 
-	@PostMapping("/usuario")
-	public ResponseEntity<String> registroUsuario(@RequestBody RegistroUsuarioDto usuarioDto) {
-	    try {
-	        if (usuarioDto.getEmailUsuario() == null || usuarioDto.getEmailUsuario().isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El email es obligatorio.");
-	        }
+    @Autowired
+    private UsuarioServicio usuarioServicio;
 
-	        if (usuarioServicio.emailExistsUsuario(usuarioDto.getEmailUsuario())) {
-	            return ResponseEntity.status(HttpStatus.CONFLICT).body("El email ya está registrado.");
-	        }
+    @Autowired
+    private ClubServicio clubServicio;
 
-	        usuarioServicio.registroUsuario(usuarioDto);
-	        return ResponseEntity.status(HttpStatus.CREATED).body("Usuario registrado exitosamente.");
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor.");
-	    }
-	}
+    /**
+     * Endpoint para registrar un nuevo usuario.
+     *
+     * @param usuarioDto Objeto que contiene la información del usuario a registrar.
+     * @return Una respuesta HTTP con el resultado del registro:
+     *         <ul>
+     *         <li>201 (CREATED): Usuario registrado exitosamente.</li>
+     *         <li>400 (BAD REQUEST): El email del usuario es obligatorio.</li>
+     *         <li>409 (CONFLICT): El email ya está registrado.</li>
+     *         <li>500 (INTERNAL SERVER ERROR): Error interno del servidor.</li>
+     *         </ul>
+     */
+    @PostMapping("/usuario")
+    public ResponseEntity<String> registroUsuario(@RequestBody RegistroUsuarioDto usuarioDto) {
+        try {
+            if (usuarioDto.getEmailUsuario() == null || usuarioDto.getEmailUsuario().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El email es obligatorio.");
+            }
 
-	@PostMapping("/club")
-	public ResponseEntity<String> registroClub(@RequestBody RegistroClubDto clubDto) {
-		try {
-	        if (clubDto.getEmailClub() == null || clubDto.getEmailClub().isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El email es obligatorio.");
-	        }
+            if (usuarioServicio.emailExistsUsuario(usuarioDto.getEmailUsuario())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("El email ya está registrado.");
+            }
 
-	        if (usuarioServicio.emailExistsUsuario(clubDto.getEmailClub())) {
-	            return ResponseEntity.status(HttpStatus.CONFLICT).body("El email ya está registrado.");
-	        }
+            usuarioServicio.registroUsuario(usuarioDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Usuario registrado exitosamente.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor.");
+        }
+    }
 
-	        clubServicio.registroClub(clubDto);
-	        return ResponseEntity.status(HttpStatus.CREATED).body("Club registrado exitosamente.");
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor.");
-	    }
-	}
+    /**
+     * Endpoint para registrar un nuevo club.
+     *
+     * @param clubDto Objeto que contiene la información del club a registrar.
+     * @return Una respuesta HTTP con el resultado del registro:
+     *         <ul>
+     *         <li>201 (CREATED): Club registrado exitosamente.</li>
+     *         <li>400 (BAD REQUEST): El email del club es obligatorio.</li>
+     *         <li>409 (CONFLICT): El email ya está registrado.</li>
+     *         <li>500 (INTERNAL SERVER ERROR): Error interno del servidor.</li>
+     *         </ul>
+     */
+    @PostMapping("/club")
+    public ResponseEntity<String> registroClub(@RequestBody RegistroClubDto clubDto) {
+        try {
+            if (clubDto.getEmailClub() == null || clubDto.getEmailClub().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El email es obligatorio.");
+            }
+
+            if (usuarioServicio.emailExistsUsuario(clubDto.getEmailClub())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("El email ya está registrado.");
+            }
+
+            clubServicio.registroClub(clubDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Club registrado exitosamente.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor.");
+        }
+    }
 }

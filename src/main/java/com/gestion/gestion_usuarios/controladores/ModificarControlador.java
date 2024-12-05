@@ -16,14 +16,31 @@ import com.gestion.gestion_usuarios.daos.UsuarioDao;
 import com.gestion.gestion_usuarios.servicios.ClubServicio;
 import com.gestion.gestion_usuarios.servicios.UsuarioServicio;
 
+/**
+ * Controlador que maneja las operaciones de modificación y consulta de usuarios y clubes.
+ * Proporciona endpoints para modificar y buscar información específica.
+ */
 @RestController
 @RequestMapping("/api/modificar")
 public class ModificarControlador {
-	@Autowired
+
+    @Autowired
     private UsuarioServicio usuarioServicio;
-	@Autowired
+
+    @Autowired
     private ClubServicio clubServicio;
-	// Endpoint para modificar el usuario
+
+    /**
+     * Endpoint para modificar los datos de un usuario.
+     *
+     * @param idUsuario   ID del usuario a modificar.
+     * @param nuevoNombre Nuevo nombre del usuario (opcional).
+     * @param nuevoDni    Nuevo DNI del usuario (opcional).
+     * @param nuevoTelefono Nuevo teléfono del usuario (opcional).
+     * @param nuevoRol    Nuevo rol del usuario (opcional).
+     * @param nuevaFoto   Nueva foto del usuario (opcional).
+     * @return una respuesta HTTP indicando el resultado de la operación.
+     */
     @PutMapping(value = "/modificarUsuario/{idUsuario}", consumes = "multipart/form-data")
     public ResponseEntity<String> modificarUsuario(
             @PathVariable long idUsuario,
@@ -50,7 +67,7 @@ public class ModificarControlador {
             return ResponseEntity.status(500).body("Error al procesar la foto");
         }
 
-        boolean modificacionExitosa = usuarioServicio.modificarUsuario(idUsuario, nuevoNombre, nuevoDni,nuevoTelefono, nuevoRol,nuevaFotoBytes);
+        boolean modificacionExitosa = usuarioServicio.modificarUsuario(idUsuario, nuevoNombre, nuevoDni, nuevoTelefono, nuevoRol, nuevaFotoBytes);
 
         if (modificacionExitosa) {
             return ResponseEntity.ok("Usuario actualizado con éxito");
@@ -58,7 +75,14 @@ public class ModificarControlador {
             return ResponseEntity.status(404).body("Usuario no encontrado");
         }
     }
-    // Endpoint para obtener un usuario por ID
+
+    /**
+     * Endpoint para obtener información de un usuario por su ID.
+     *
+     * @param idUsuario ID del usuario a buscar.
+     * @return una respuesta HTTP con el objeto {@link UsuarioDao} si se encuentra el usuario,
+     *         o un código de estado 404 si no se encuentra.
+     */
     @GetMapping("/buscarUsuario/{idUsuario}")
     public ResponseEntity<UsuarioDao> obtenerUsuario(@PathVariable long idUsuario) {
         UsuarioDao usuario = usuarioServicio.obtenerUsuarioPorId(idUsuario);
@@ -70,8 +94,15 @@ public class ModificarControlador {
         }
     }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- // Endpoint para modificar el usuario
+    /**
+     * Endpoint para modificar los datos de un club.
+     *
+     * @param idClub      ID del club a modificar.
+     * @param nuevoNombre Nuevo nombre del club (opcional).
+     * @param nuevaSede   Nueva sede del club (opcional).
+     * @param nuevaFoto   Nueva foto del club (opcional).
+     * @return una respuesta HTTP indicando el resultado de la operación.
+     */
     @PutMapping(value = "/modificarClub/{idClub}", consumes = "multipart/form-data")
     public ResponseEntity<String> modificarClub(
             @PathVariable long idClub,
@@ -79,9 +110,9 @@ public class ModificarControlador {
             @RequestParam(required = false) String nuevaSede,
             @RequestPart(required = false) MultipartFile nuevaFoto) {
 
-        System.out.println("Recibido idUsuario: " + idClub);
+        System.out.println("Recibido idClub: " + idClub);
         System.out.println("Recibido nuevoNombre: " + nuevoNombre);
-        System.out.println("Recibido nuevoTelefono: " + nuevaSede);
+        System.out.println("Recibido nuevaSede: " + nuevaSede);
         System.out.println("Recibido nuevaFoto: " + (nuevaFoto != null ? nuevaFoto.getOriginalFilename() : "null"));
 
         byte[] nuevaFotoBytes = null;
@@ -102,15 +133,22 @@ public class ModificarControlador {
             return ResponseEntity.status(404).body("Club no encontrado");
         }
     }
-    // Endpoint para obtener un usuario por ID
+
+    /**
+     * Endpoint para obtener información de un club por su ID.
+     *
+     * @param idClub ID del club a buscar.
+     * @return una respuesta HTTP con el objeto {@link ClubDao} si se encuentra el club,
+     *         o un código de estado 404 si no se encuentra.
+     */
     @GetMapping("/buscarClub/{idClub}")
     public ResponseEntity<ClubDao> obtenerClub(@PathVariable long idClub) {
-    	ClubDao club = clubServicio.obtenerClubPorId(idClub);
+        ClubDao club = clubServicio.obtenerClubPorId(idClub);
 
         if (club != null) {
             return ResponseEntity.ok(club); // Devuelve el club si lo encuentra
         } else {
-            return ResponseEntity.status(404).body(null); // Retorna un 404 si no encuentra el usuario
+            return ResponseEntity.status(404).body(null); // Retorna un 404 si no encuentra el club
         }
     }
 }

@@ -5,19 +5,32 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-// Asegúrate de que sea la entidad
 import com.gestion.gestion_usuarios.daos.UsuarioDao;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioDao, Long> {
 
-	// Método para encontrar usuarios cuyo nombre contiene una subcadena (insensible
-	// a mayúsculas/minúsculas)
+    /**
+     * Busca un usuario por su email.
+     * 
+     * @param emailUsuario el email del usuario.
+     * @return el usuario encontrado con ese email.
+     */
+    UsuarioDao findByEmailUsuario(String emailUsuario);
 
-	UsuarioDao findByEmailUsuario(String emailUsuario);
+    /**
+     * Verifica si un usuario con el email dado ya existe en la base de datos.
+     * 
+     * @param emailUsuario el email del usuario.
+     * @return true si el usuario con ese email existe, false en caso contrario.
+     */
+    boolean existsByEmailUsuario(String emailUsuario);
 
-	boolean existsByEmailUsuario(String emailUsuario); // Método para revisar si el email ya está registrado
-
-	Optional<UsuarioDao> findById(Long id); // Método para encontrar por ID
-
+    /**
+     * Busca un usuario por su ID.
+     * 
+     * @param id el ID del usuario.
+     * @return un Optional que contiene el usuario encontrado, o vacío si no se encuentra.
+     */
+    Optional<UsuarioDao> findById(Long id); 
 }

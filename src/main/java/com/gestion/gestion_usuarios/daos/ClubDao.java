@@ -12,8 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-
-
 /**
  * Clase que representa la entidad Club en la base de datos.
  * <p>
@@ -23,10 +21,10 @@ import jakarta.persistence.Table;
  * </p>
  */
 @Entity // Indica que esta clase es una entidad JPA
-@Table(name = "clubs", schema= "gestion")
+@Table(name = "clubs", schema= "gestion") // Mapea esta clase a la tabla "clubs" del esquema "gestion"
 public class ClubDao {
 
-	/** Identificador único del club, generado automáticamente. */
+    /** Identificador único del club, generado automáticamente. */
     @Id // Marca este campo como la clave primaria
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Genera el ID automáticamente
     @Column(name = "id_club", updatable = false) // Configura la columna de la base de datos
@@ -56,13 +54,14 @@ public class ClubDao {
 
     /**
      * Constructor vacío, requerido por JPA.
+     * Este constructor se utiliza para la creación de instancias por parte del framework JPA.
      */
     public ClubDao() {
     }
 
     /**
      * Constructor para crear un nuevo club sin el ID.
-     *
+     * 
      * @param nombreClub el nombre del club
      * @param emailClub el email del club
      * @param passwdClub la contraseña del club
@@ -78,49 +77,103 @@ public class ClubDao {
     }
 
     /******************************* GETTERS Y SETTERS **************************************/
+
+    /**
+     * Obtiene el ID único del club.
+     *
+     * @return El ID del club.
+     */
     public long getIdClub() {
         return idClub; // Solo tiene getter, ya que no queremos que se establezca manualmente
     }
 
+    /**
+     * Obtiene el nombre del club.
+     *
+     * @return El nombre del club.
+     */
     public String getNombreClub() {
         return nombreClub;
     }
 
+    /**
+     * Establece el nombre del club.
+     *
+     * @param nombreClub El nombre del club.
+     */
     public void setNombreClub(String nombreClub) {
         this.nombreClub = nombreClub;
     }
 
+    /**
+     * Obtiene el email del club.
+     *
+     * @return El email del club.
+     */
     public String getEmailClub() {
         return emailClub;
     }
 
+    /**
+     * Establece el email del club.
+     *
+     * @param emailClub El email del club.
+     */
     public void setEmailClub(String emailClub) {
         this.emailClub = emailClub;
     }
 
+    /**
+     * Obtiene la contraseña del club.
+     *
+     * @return La contraseña del club.
+     */
     public String getPasswordClub() {
         return passwordClub;
     }
 
+    /**
+     * Establece la contraseña del club.
+     *
+     * @param passwordClub La contraseña del club.
+     */
     public void setPasswordClub(String passwordClub) {
         this.passwordClub = passwordClub;
     }
 
+    /**
+     * Obtiene la sede del club.
+     *
+     * @return La sede del club.
+     */
     public String getSedeClub() {
         return sedeClub;
     }
 
+    /**
+     * Establece la sede del club.
+     *
+     * @param sedeClub La sede del club.
+     */
     public void setSedeClub(String sedeClub) {
         this.sedeClub = sedeClub;
     }
 
+    /**
+     * Obtiene la imagen del club en formato de bytes.
+     *
+     * @return Los bytes que representan la imagen del club.
+     */
     public byte[] getImagenClub() {
         return imagenClub;
     }
 
+    /**
+     * Establece la imagen del club en formato de bytes.
+     *
+     * @param imagenClub Los bytes que representan la nueva imagen del club.
+     */
     public void setImagenClub(byte[] imagenClub) {
         this.imagenClub = imagenClub;
     }
-
-
 }

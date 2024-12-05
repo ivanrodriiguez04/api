@@ -8,16 +8,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controlador para gestionar el proceso de autenticación de usuarios y clubes.
+ * Define endpoints relacionados con la validación de credenciales.
+ */
 @RestController
 @RequestMapping("/api/login")
 public class LoginControlador {
 
     @Autowired
     private UsuarioServicio usuarioServicio;
+
     @Autowired
     private ClubServicio clubServicio;
 
-    // Endpoint para autenticar usuario
+    /**
+     * Endpoint para autenticar un usuario.
+     *
+     * @param usuario el objeto {@link LoginUsuarioDto} que contiene las credenciales del usuario (email y contraseña).
+     * @return una respuesta HTTP con el rol del usuario si las credenciales son correctas, 
+     *         o un mensaje de error si son incorrectas.
+     */
     @PostMapping("/validarUsuario")
     public ResponseEntity<String> autenticarUsuario(@RequestBody LoginUsuarioDto usuario) {
         System.out.println("Email recibido: " + usuario.getEmail());
@@ -45,8 +56,14 @@ public class LoginControlador {
 
         return ResponseEntity.status(401).body("Rol desconocido.");
     }
-    
- // Endpoint para autenticar club
+
+    /**
+     * Endpoint para autenticar un club.
+     *
+     * @param club el objeto {@link LoginClubDto} que contiene las credenciales del club (email y contraseña).
+     * @return una respuesta HTTP con el rol "club" si las credenciales son correctas,
+     *         o un mensaje de error si son incorrectas.
+     */
     @PostMapping("/validarClub")
     public ResponseEntity<String> autenticarClub(@RequestBody LoginClubDto club) {
         System.out.println("Email recibido: " + club.getEmailClub());
