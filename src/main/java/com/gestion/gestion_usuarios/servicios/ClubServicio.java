@@ -102,4 +102,16 @@ public class ClubServicio {
 	    return clubRepository.findById(idClub).orElse(null);
 	    // Asegúrate de que `usuarioRepository` esté configurado correctamente
 	}
+	public boolean borrarClub(Long idClub) {
+        try {
+            if (clubRepository.existsById(idClub)) {
+                clubRepository.deleteById(idClub); // Elimina el club por ID
+                return true;
+            } else {
+                return false; // Si no existe el club, retorna false
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar el club: " + e.getMessage());
+        }
+    }
 }

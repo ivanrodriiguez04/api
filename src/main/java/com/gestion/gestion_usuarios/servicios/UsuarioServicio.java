@@ -139,5 +139,12 @@ public class UsuarioServicio {
 	    return usuarioRepository.findById(idUsuario).orElse(null);
 	    // Asegúrate de que `usuarioRepository` esté configurado correctamente
 	}
+	public boolean borrarUsuario(Long idUsuario) {
+        if (usuarioRepository.existsById(idUsuario)) {
+            usuarioRepository.deleteById(idUsuario);
+            return true;
+        }
+        return false;
+    }
 
 }
